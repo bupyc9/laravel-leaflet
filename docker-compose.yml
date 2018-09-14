@@ -1,0 +1,82 @@
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:alpine
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+
+  mariadb:
+    image: mariadb:10.2
+    volumes:
+      - ./docker/mariadb/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=homestead
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=qwe123asd
+      - MYSQL_ROOT_PASSWORD=qwe123asd
+    ports:
+      - "3306:3306"
+    networks:
+      - default
+
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+      args:
+        - INSTALL_XDEBUG=true
+        - INSTALL_PHPREDIS=true
+        - INSTALL_OPCACHE=true
+    volumes:
+      - ./:/var/www:cached
+    command: sh -c 'composer install; php artisan migrate; php-fpm;'
+    environment:
+      - PHP_IDE_CONFIG=serverName=localhost
+    depends_on:
+      - mariadb
+      - redis
+    expose:
+      - "9000"
+    networks:
+      - default
+
+  nginx:
+    build: ./docker/nginx
+    volumes:
+      - ./:/var/www:cached
+      - ./docker/nginx/sites/default.conf:/etc/nginx/sites-available/default.conf
+      - ./docker/logs/nginx/:/var/log/nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - php-fpm
+    networks:
+      - default
+
+  node:
+    image: node:10
+    volumes:
+      - ./:/var/www
+    command: sh -c 'npm install && npm run watch'
+    working_dir: /var/www
+    networks:
+      - default
+
+  php-cli:
+    build:
+      context: ./docker/php-cli
+      args:
+        - INSTALL_XDEBUG=true
+        - INSTALL_PHPREDIS=true
+    volumes:
+      - ./:/var/www:cached
+    environment:
+      - PHP_IDE_CONFIG=serverName=localhost
+    networks:
+      - default
