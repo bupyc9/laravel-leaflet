@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -26,10 +27,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Point extends Model
 {
-    protected $fillable = ['longitude', 'latitude'];
+    protected $fillable = ['longitude', 'latitude', 'category_id'];
 
-    public function category(): HasOne
+    protected $casts = [
+        'created_at' => 'datetime:' . \DateTime::ATOM,
+        'updated_at' => 'datetime:' . \DateTime::ATOM,
+    ];
+
+    public function category(): BelongsTo
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 }

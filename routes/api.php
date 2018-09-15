@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('categories', 'CategoryController')->only(['index', 'store', 'update']);
+Route::resource('points', 'PointController')->only(['index', 'store']);
