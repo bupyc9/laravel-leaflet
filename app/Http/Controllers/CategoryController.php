@@ -37,7 +37,7 @@ class CategoryController extends Controller
 
         $category = Category::create($data);
 
-        return \response(['id' => $category->id]);
+        return \response($category->toArray());
     }
 
     /**
