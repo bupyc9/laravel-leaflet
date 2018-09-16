@@ -12,11 +12,30 @@ class PointController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return \response(Point::query()->with('category')->get()->toArray());
+        $data = \Validator::make(
+            $request->query(),
+            [
+                'category_id' => 'integer|exists:categories,id'
+            ]
+        )->validate();
+
+        $where = [];
+        if (\array_key_exists('category_id', $data)) {
+            $where['category_id'] = $data['category_id'];
+        }
+
+        $items = Point::query()
+            ->where($where)
+            ->with('category')
+            ->get();
+
+        return \response($items->toArray());
     }
 
     /**
