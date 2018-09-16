@@ -38,7 +38,8 @@ class PointController extends Controller
         )->validate();
 
         $point = Point::create($data);
+        $point->category;
 
-        return \response(['id' => $point->id]);
+        return \response($point->toArray());
     }
 }
