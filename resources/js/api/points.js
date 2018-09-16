@@ -1,10 +1,19 @@
 import axios from 'axios';
 import moment from 'moment';
 
-export const index = () => {
+export const index = async (categoryId = null) => {
     return new Promise(function (resolve, reject) {
+        let params = {};
+        categoryId = parseInt(categoryId);
+
+        if (categoryId !== null && categoryId > 0) {
+            params.category_id = categoryId;
+        }
+
         axios
-            .get('/api/points')
+            .get('/api/points', {
+                params: params
+            })
             .then(response => {
                 let items = response.data.map(function (item) {
                     item.created_at = moment(item.created_at);
@@ -21,7 +30,7 @@ export const index = () => {
     });
 };
 
-export const create = (longitude, latitude, category_id) => {
+export const create = async (longitude, latitude, category_id) => {
     return new Promise(function (resolve, reject) {
         axios
             .post('/api/points', {

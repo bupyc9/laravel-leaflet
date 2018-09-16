@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!--<Spinner v-if="loading" class="m-auto"/>-->
+        <Spinner v-if="loading" class="m-auto"/>
         <div>
             <div class="form-group">
                 <label for="categories">Category</label>

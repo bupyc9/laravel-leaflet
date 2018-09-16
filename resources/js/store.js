@@ -33,9 +33,9 @@ export default new Vuex.Store({
         addPoint({commit}, point) {
             commit("ADD_POINT", point);
         },
-        loadPoints({commit}) {
+        async loadPoints({commit}, categoryId = null) {
             return new Promise(function (resolve, reject) {
-                pointsApi.index()
+                pointsApi.index(categoryId)
                     .then(items => {
                         commit("SET_POINTS", items);
                         resolve(items);
