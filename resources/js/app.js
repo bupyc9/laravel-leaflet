@@ -19,10 +19,14 @@ import App from "./components/App";
 import Spinner from "./components/Spinner";
 import routes from "./routes";
 import store from "./store";
+import * as Vue2Leaflet from 'vue2-leaflet';
 
 Vue.use(VueRouter);
 Vue.component("App", App);
 Vue.component("Spinner", Spinner);
+Vue.component('v-map', Vue2Leaflet.LMap);
+Vue.component('v-tilelayer', Vue2Leaflet.LTileLayer);
+Vue.component('v-marker', Vue2Leaflet.LMarker);
 
 const router = new VueRouter({
     mode: "history",

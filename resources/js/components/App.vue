@@ -8,6 +8,9 @@
                 <li class="nav-item">
                     <router-link :to="{name: 'categoryList'}" class="nav-link">Categories</router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link :to="{name: 'pointCreate'}" class="nav-link">Add Point</router-link>
+                </li>
             </ul>
         </header>
         <main role="main">

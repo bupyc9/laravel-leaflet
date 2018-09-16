@@ -1,4 +1,5 @@
 import PointIndex from "./components/points/PointIndex";
+import PointCreate from "./components/points/PointCreate";
 import CategoryList from "./components/categories/CategoryList";
 
 export default [
@@ -11,5 +12,10 @@ export default [
         path: "/categories",
         name: "categoryList",
         component: CategoryList,
+    },
+    {
+        path: "/points-create",
+        name: "pointCreate",
+        component: PointCreate,
     },
 ];
