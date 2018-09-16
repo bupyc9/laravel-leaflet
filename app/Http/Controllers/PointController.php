@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Point;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
