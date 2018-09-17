@@ -42,6 +42,7 @@
                     .then(category => {
                         self.$store.dispatch('addCategory', category);
                         self.categoryName = '';
+                        window.$(self.$el).modal("toggle");
                     });
             },
         }
