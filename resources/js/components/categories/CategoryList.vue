@@ -19,6 +19,11 @@
                 <td>{{category.created_at.format("DD-MM-YYYY hh:mm:ss")}}</td>
                 <td>{{category.updated_at.format("DD-MM-YYYY hh:mm::ss")}}</td>
                 <td>{{category.name}}</td>
+                <td>
+                    <button type="button" class="btn" data-toggle="modal"
+                            :data-target="'#category-update-' + category.id">Edit</button>
+                    <CategoryEdit v-bind:category="Object.assign({}, category)" :id="'category-update-' + category.id"/>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -28,11 +33,12 @@
 
 <script>
     import CategoryCreate from "./CategoryCreate";
+    import CategoryEdit from "./CategoryEdit";
     import {mapState} from "vuex";
 
     export default {
         name: "CategoryList",
-        components: {CategoryCreate},
+        components: {CategoryCreate, CategoryEdit},
         data() {
             return {
                 loading: false,

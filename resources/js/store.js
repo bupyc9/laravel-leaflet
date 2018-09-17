@@ -54,7 +54,7 @@ export default new Vuex.Store({
         UPDATE_CATEGORY(state, category) {
             state.categories.forEach(item => {
                 if (item.id === category.id) {
-                    item.name = category.nackCount;
+                    item.name = category.name;
                 }
             });
         },
