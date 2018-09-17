@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Category;
 use App\Point;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -38,6 +39,48 @@ class PointControllerTest extends TestCase
                         'updated_at',
                         'longitude',
                         'latitude',
+                    ],
+                ]
+            );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexFilter(): void
+    {
+        factory(Category::class, 1)->create()->each(
+            function (Category $category) {
+                factory(Point::class, 2)->create(
+                    [
+                        'category_id' => $category->id,
+                    ]
+                );
+            }
+        );
+
+        /** @var Category $category */
+        $category = factory(Category::class)->create();
+        /** @var Point[]|Collection $points */
+        $points = factory(Point::class, 1)->create(['category_id' => $category->id]);
+        $points->each(function (Point $point) {
+            $point->category;
+        });
+
+        $response = $this->json('GET', route('points.index', ['category_id' => $category->id]));
+
+        $response
+            ->assertOk()
+            ->assertJson($points->toArray());
+
+        $response = $this->json('GET', route('points.index', ['category_id' => \random_int(100, 200)]));
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure(
+                [
+                    'errors' => [
+                        'category_id',
                     ],
                 ]
             );
